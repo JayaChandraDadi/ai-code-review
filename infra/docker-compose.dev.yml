@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports: ["5672:5672", "15672:15672"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: reviewdb
+      POSTGRES_USER: review
+      POSTGRES_PASSWORD: reviewpw
+    ports: ["5433:5432"]
+    volumes:
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  api-gateway:
+    build: ../apps/api-gateway
+    env_file: ../.env
+    ports: ["8080:8080"]
+    depends_on: [rabbitmq, postgres]
+
+  worker:
+    build: ../apps/worker
+    env_file: ../.env
+    depends_on: [rabbitmq, postgres]
