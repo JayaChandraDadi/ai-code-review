@@ -16,3 +16,7 @@ export async function insertReviewEvent(row: {
                ON CONFLICT (id) DO NOTHING`;
   await pool.query(sql, [row.id, row.repo, row.pr_number, row.head_sha, row.status, row.payload]);
 }
+export async function updateFindings(id: string, findings: any, status: string = 'REVIEWED') {
+  const sql = `UPDATE review_events SET status=$2, findings=$3, reviewed_at=NOW() WHERE id=$1`;
+  await pool.query(sql, [id, findings, status]);
+}
