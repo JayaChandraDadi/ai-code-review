@@ -19,4 +19,4 @@ export async function consume(
       ch.nack(msg, false, false); // DLQ in future
     }
   });
-}
+}//tryin to make a testing to the file this is the change
