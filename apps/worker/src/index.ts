@@ -34,7 +34,13 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
     }
 
     // 3) persist results as REVIEWED
-    await updateFindings(payload.id, findings, 'REVIEWED');
+    await updateFindings(payload.id, findings);
     console.log('reviewed', payload.id, payload.repo, `#${payload.pr_number}`, `${findings.issues.length} issues`);
   });
+
+
+  // TODO: remove (sprint2 test)
+console.log("debug from sprint2 test");
+
+const password = "x"; // deliberate secret-leak test
 })();
