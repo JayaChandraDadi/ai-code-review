@@ -1,3 +1,4 @@
+// apps/worker/src/db.ts
 import pg from 'pg';
 const { Pool } = pg;
 
@@ -16,7 +17,16 @@ export async function insertReviewEvent(row: {
                ON CONFLICT (id) DO NOTHING`;
   await pool.query(sql, [row.id, row.repo, row.pr_number, row.head_sha, row.status, row.payload]);
 }
-export async function updateFindings(id: string, findings: any, status: string = 'REVIEWED') {
-  const sql = `UPDATE review_events SET status=$2, findings=$3, reviewed_at=NOW() WHERE id=$1`;
-  await pool.query(sql, [id, findings, status]);
+
+/**
+ * Correct param order: $1 id, $2 status (text), $3 findings (jsonb)
+ */
+export async function updateFindings(id: string, findings: any) {
+  const sql = `UPDATE review_events
+               SET status = $2,
+                   findings = $3,
+                   reviewed_at = NOW()
+               WHERE id = $1`;
+  // Important: keep 'REVIEWED' in $2 and the JSON object in $3
+  await pool.query(sql, [id, 'REVIEWED', findings]);
 }

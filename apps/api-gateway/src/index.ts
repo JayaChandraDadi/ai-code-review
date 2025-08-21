@@ -4,9 +4,10 @@ import { getChannel, publish } from './rabbitmq.js';
 import { verifyGithubSignature } from './signature.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { ReviewTask } from './types.js';
+import reviewRoutes from './routes/review.js';
 
 const app = express();
-
+app.use('/reviews', reviewRoutes);
 // capture raw body for HMAC
 app.use(bodyParser.json({ verify: (req, _res, buf) => ((req as any).rawBody = buf) }));
 
