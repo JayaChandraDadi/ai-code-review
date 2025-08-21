@@ -1,20 +1,21 @@
 {
   "name": "worker",
   "version": "0.1.0",
-  "type": "module",
-  "main": "dist/index.js",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc -p .",
     "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts"
+    "dev": "ts-node src/index.ts"
   },
   "dependencies": {
+    "@huggingface/inference": "^4.7.1",
     "amqplib": "^0.10.3",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.19.11",
     "@types/pg": "^8.15.5",
     "tsx": "^4.7.0",
     "typescript": "^5.5.4"
